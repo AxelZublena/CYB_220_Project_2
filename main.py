@@ -3,12 +3,14 @@ import requests
 
 from page import Page 
 
-def sendRequest(url):
+def getPage(url):
     r = requests.get(url)
     content = r.content
 
-    page = Page(content)
+    return Page(content)
 
+
+def process(page):
     print("<links>")
     links = page.get_links()
     print(f"There are {len(links)} links on the page.")
@@ -31,4 +33,6 @@ def sendRequest(url):
 if __name__=="__main__":
     # url = "https://nostarch.com"
     url = sys.argv[1]
-    sendRequest(url)
+    page = getPage(url)
+    process(page)
+
