@@ -4,10 +4,16 @@ import requests
 from page import Page 
 
 def getPage(url):
-    r = requests.get(url)
-    content = r.content
-
-    return Page(content)
+    try:
+        r = requests.get(url)
+        if r.status_code == 200:
+            content = r.content
+            return Page(content)
+        else:
+            raise Exception("HTTP request did not return 200")
+    except Exception as e:
+        print("Page could not be reached.")
+        return 0
 
 
 def process(page):
@@ -34,5 +40,6 @@ if __name__=="__main__":
     # url = "https://nostarch.com"
     url = sys.argv[1]
     page = getPage(url)
-    process(page)
+    if page != 0:
+        process(page)
 
