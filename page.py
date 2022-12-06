@@ -2,7 +2,14 @@ from io import BytesIO
 from lxml import etree
 
 class Page():
+    """
+    Object with methods to store a webpage's content and static about it.    
+    """
+
     def __init__(self, content):
+        """
+        Initialize a Page with the returned content of an HTTP GET request
+        """
         parser = etree.HTMLParser()
         self.html = etree.parse(BytesIO(content), parser=parser)
 
@@ -16,37 +23,46 @@ class Page():
 
 
     def get_links(self):
+        """Returns the <a>s found in the page"""
         self.links = []
         for link in self.html.findall('//a'):
             self.links.append(link)
         return self.links
 
     def get_divs(self):
+        """Returns the <div>s found in the page"""
         self.divs = []
         for div in self.html.findall('//div'):
             self.divs.append(div)
         return self.divs
 
     def get_paragraphs(self):
+        """Returns the <p>s found in the page"""
         self.paragraphs = []
         for paragraph in self.html.findall('//p'):
             self.paragraphs.append(paragraph)
         return self.paragraphs
 
     def get_words(self):
-        # Use content of paragraphs and links and count words by splitting at " "
+        """
+        Returns the words found in the page.
+        Achieves this by using the content of paragraphs
+        and links and count words by splitting at " "
+        """
         self.words = []
         paragraphs = self.get_paragraphs()
         links = self.get_links()
 
         self.words = []
 
+        # Paragraph tags
         for paragraph in paragraphs:
             if paragraph.text:
                 temp_words = paragraph.text.split(" ")
                 for word in temp_words:
                     self.words.append(word)
 
+        # Links
         for link in links:
             if link.text:
                 temp_words = link.text.split(" ")
@@ -54,6 +70,20 @@ class Page():
                     self.words.append(word)
 
         return self.words
+
+    def get_linked_files(self):
+        """
+        Returns the paragraphs found in the page
+        Achieves this by extracting <link>, <img> and <a src=""> tags
+        """
+        self.files = []
+        # Link tags
+        for file in self.html.findall('//link'):
+            self.files.append(file.attrib['href'])
+        # Image tags
+        for file in self.html.findall('//img'):
+            self.files.append(file.attrib['src'])
+        return self.files
 
 
     # def get_info(self):

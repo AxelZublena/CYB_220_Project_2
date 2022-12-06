@@ -34,7 +34,12 @@ def process(page):
     print("\n<words>")
     words = page.get_words()
     print(f"There are approximately {len(words)} words on the page.")
-    print(words)
+    # print(words)
+
+    print("\n<files>")
+    files = page.get_linked_files()
+    print(f"There are {len(files)} files linked on the page.")
+    print(files)
 
 if __name__=="__main__":
     # url = "https://nostarch.com"
