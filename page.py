@@ -6,7 +6,7 @@ class Page():
     Object with methods to store a webpage's content and static about it.    
     """
 
-    def __init__(self, content):
+    def __init__(self, content, elapsed_time):
         """
         Initialize a Page with the returned content of an HTTP GET request
         """
@@ -19,8 +19,11 @@ class Page():
         self.words = []
         self.files = []
         self.images = []
-        self.language = ""
+        self.elapsed_time = elapsed_time.total_seconds()
 
+    def get_elapsed_time(self):
+        """Returns the time the server to reply"""
+        return f"{self.elapsed_time}s" 
 
     def get_links(self):
         """Returns the <a>s found in the page"""
@@ -30,11 +33,12 @@ class Page():
         return self.links
 
     def get_formated_links(self):
-        """Returns the <a>s found in the page"""
-        self.links = []
-        for link in self.html.findall('//a'):
-            self.links.append(f"{link.get('href')} -> {link.text}")
-        return self.links
+        """Returns the formated version of the links found in the page"""
+        links = self.get_links()
+        formatted_links = []
+        for link in links:
+            formatted_links.append(f"{link.get('href')} -> {link.text}")
+        return formatted_links
 
     def get_divs(self):
         """Returns the <div>s found in the page"""
@@ -99,11 +103,3 @@ class Page():
             self.files.append(image)
         return self.files
 
-
-    # def get_info(self):
-    #     return {
-    #             "date": self.date,
-    #             "title": f"[on {self.color}]{self.title}[/on {self.color}]",
-    #             "color": self.color,
-    #             "id": self.id
-    #             }
