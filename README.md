@@ -1,5 +1,12 @@
 # CYB 220 Final Project: Website analyser
 
+## Dependencies
+Use `pip install <dependency>` to install the following dependencies:
+* requests
+* lxml
+* python-whois
+* tabulate
+
 ## Features
 CLI app to get information about a webpage.
 

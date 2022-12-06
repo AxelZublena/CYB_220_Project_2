@@ -29,6 +29,13 @@ class Page():
             self.links.append(link)
         return self.links
 
+    def get_formated_links(self):
+        """Returns the <a>s found in the page"""
+        self.links = []
+        for link in self.html.findall('//a'):
+            self.links.append(f"{link.get('href')} -> {link.text}")
+        return self.links
+
     def get_divs(self):
         """Returns the <div>s found in the page"""
         self.divs = []
