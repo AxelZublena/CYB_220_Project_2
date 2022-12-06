@@ -1,6 +1,6 @@
 import sys
 import requests
-
+import whois
 from page import Page 
 
 def getPage(url):
@@ -52,4 +52,9 @@ if __name__=="__main__":
     page = getPage(url)
     if page != 0:
         process(page)
+
+    print("\nPerforming WHOIS analysis...")
+    w = whois.whois(url)
+    print(w.name_servers)
+    print(w.expiration_date)
 
