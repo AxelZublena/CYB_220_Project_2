@@ -41,6 +41,11 @@ def process(page):
     print(f"There are {len(files)} files linked on the page.")
     print(files)
 
+    print("\n<images>")
+    images = page.get_images()
+    print(f"There are {len(images)} images linked on the page.")
+    print(images)
+
 if __name__=="__main__":
     # url = "https://nostarch.com"
     url = sys.argv[1]

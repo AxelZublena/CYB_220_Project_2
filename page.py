@@ -43,6 +43,13 @@ class Page():
             self.paragraphs.append(paragraph)
         return self.paragraphs
 
+    def get_images(self):
+        """Returns the <img>s found in the page"""
+        self.images= []
+        for image in self.html.findall('//img'):
+            self.images.append(image.attrib['src'])
+        return self.images
+
     def get_words(self):
         """
         Returns the words found in the page.
@@ -81,8 +88,8 @@ class Page():
         for file in self.html.findall('//link'):
             self.files.append(file.attrib['href'])
         # Image tags
-        for file in self.html.findall('//img'):
-            self.files.append(file.attrib['src'])
+        for image in self.get_images():
+            self.files.append(image)
         return self.files
 
 
