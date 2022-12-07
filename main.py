@@ -111,15 +111,19 @@ def format_list(list):
     return final_list
 
 if __name__=="__main__":
+    # Get the URL of page to be analyzed
     url = sys.argv[1]
 
     print(f"\nAcquiring statistics about {url}...\n")
+    # Send HTTP GET request and create Page object with the response
     page = get_page(url)
     if page != 0:
+        # If the response is not empty, analyse the page
         analyse_page(page)
 
     print("\nPerforming WHOIS analysis...\n")
+    # Gather WHOIS information
     w = whois.whois(url)
-    # print(int(len(w.name_servers)/2))
+    # Display table with meaningful WHOIS information
     print(tabulate(generate_whois_table(w), headers='firstrow', tablefmt='fancy_grid'))
 
