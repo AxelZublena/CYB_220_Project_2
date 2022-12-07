@@ -2,7 +2,9 @@ import sys
 import requests
 import whois
 import os
+
 from tabulate import tabulate
+from whois.parser import datetime
 
 from page import Page 
 
@@ -49,6 +51,44 @@ def generate_stat_table(links, divs, paragraphs, words, files, images, elapsed_t
              ["Server response time", elapsed_time, ""]]
     return table
 
+def generate_whois_table(whois_result):
+    """Create whois table to be displayed"""
+
+    # Gather meaningful information
+    domain_name = whois_result.domain_name[1] if whois_result.domain_name else "Could not retrieve this information"
+    registrar = whois_result.registrar or "Could not retrieve this information"
+    name_servers = whois_result.name_servers
+    creation_date = get_correct_date(whois_result.creation_date) 
+    expiration_date = get_correct_date(whois_result.expiration_date)
+    updated_date = get_correct_date(whois_result.updated_date)
+
+    # Handle None values for name_servers
+    name_servers = "Could not retrieve this information" if name_servers is None else tabulate(format_list(name_servers), tablefmt="plain") 
+
+    # Create table
+    table = [['Name', 'Number', 'Value'], 
+             ["Domain Name", 1, domain_name],
+             ["Registrar", 1, registrar],
+             ["Name Servers", 1 if len(name_servers) == 35 else len(whois_result.name_servers), name_servers],
+             ["Creation Date", 1, creation_date],
+             ["Expiration Date", 1, expiration_date],
+             ["Updated Date", 1, updated_date]]
+    return table
+
+def get_correct_date(date):
+    """Handle None values and lists"""
+    if date is None:
+        # If None, return error message
+        return "Could not retrieve this information"
+
+    if type(date) == datetime:
+        # If type date, it means that it is not a list. The date can be returned.
+        return date
+    else:
+        # It is assumed that date is a list. Return the first object of the list.
+        return date[0]
+
+
 def format_list(list):
     """
     Put every item of a list into a list.
@@ -78,10 +118,8 @@ if __name__=="__main__":
     if page != 0:
         analyse_page(page)
 
-    print("\nPerforming WHOIS analysis...")
+    print("\nPerforming WHOIS analysis...\n")
     w = whois.whois(url)
-    print(w.name_servers)
-    print(w.expiration_date)
-
-    print(os.get_terminal_size().columns)
+    # print(int(len(w.name_servers)/2))
+    print(tabulate(generate_whois_table(w), headers='firstrow', tablefmt='fancy_grid'))
 
