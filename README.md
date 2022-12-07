@@ -1,5 +1,11 @@
 # CYB 220 Final Project: Website analyser
 
+## How to use
+Python 3 should be used. `https://` should be present in the url.
+
+`python main.py <url>`
+
+
 ## Dependencies
 Use `pip install <dependency>` to install the following dependencies:
 * requests
@@ -16,7 +22,6 @@ CLI app to get information about a webpage.
 * number of words
 * number of file linked (css, js etc..)
 * number of images
-* language
 
 Maybe:
 * colors used
